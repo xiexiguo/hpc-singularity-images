@@ -1,0 +1,35 @@
+BootStrap: docker
+From: ubuntu:16.04
+Registry: docker.mirrors.ustc.edu.cn
+%labels
+      mellanox infiniband drivers
+      Version v1.0
+
+%files
+     MLNX_OFED_LINUX-4.3-1.0.1.0-ubuntu16.04-x86_64.tgz /tmp
+
+%post 
+
+cd /tmp && tar xf MLNX_OFED_LINUX-4.3-1.0.1.0-ubuntu16.04-x86_64.tgz
+cat <<EOF > /etc/apt/sources.list.d/mlnx_ofed.list
+deb file:/tmp/MLNX_OFED_LINUX-4.3-1.0.1.0-ubuntu16.04-x86_64/DEBS ./
+EOF
+apt install -y wget 
+wget -qO - http://www.mellanox.com/downloads/ofed/RPM-GPG-KEY-Mellanox | apt-key add -
+apt-key list
+apt update
+apt install -y mlnx-ofed-basic
+apt install -y perftest
+#apt install -y libibverbs
+#apt install -y net-tools \
+#      rdma  libibverbs-utils libibverbs-devel  libibverbs-devel-static  opensm \
+#      infinipath-psm  libcxgb3  libcxgb4  libipathverbs  libmthca libmlx4  libmlx5 \
+#      libnes libocrdma ibutils libibcm libibcommon libibmad libibumad librdmacm-utils \
+#      librdmacm-devel librdmacm libibumad-devel perftest librdmacm librdmacm-utils \
+#      ibacm libibverbs-utils infiniband-diags ibutils qperf dapl dapl-utils dapl-devel dapl-devel-static
+
+%runscript
+      /bin/bash
+
+%test
+      ibstat

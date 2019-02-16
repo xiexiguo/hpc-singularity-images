@@ -1,0 +1,12 @@
+Bootstrap: localimage
+From: /public/singularity/images/ubuntu/intelmpi-runtime.img
+
+%labels
+    HPL compiled by intelmpi
+ 
+%files
+    xhpl    /usr/local/bin
+    HPL.dat /usr/local/bin
+
+%runscript
+    /bin/bash

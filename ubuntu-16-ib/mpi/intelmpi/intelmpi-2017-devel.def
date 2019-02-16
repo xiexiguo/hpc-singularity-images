@@ -1,0 +1,29 @@
+Bootstrap: localimage
+From: /public/singularity/images/ubuntu/intel-devel.img
+
+%labels
+    intelmpi 2017 development, including compiler, libraries and head files.
+
+%files
+    impi-2017-devel.tgz /opt
+
+%post
+    apt install -y libdapl2 libdapl-dev dapl2-utils 
+    cd /opt && tar xf impi-2017-devel.tgz
+    rm -f impi-2017-devel.tgz
+    mkdir -p /public/home
+    mkdir -p /public/software
+    mkdir -p /public/sourcecode
+
+%runscript
+    /bin/bash
+
+#%test
+#    mpiicc -show
+
+%environment
+    export CP_INTELMPI_DIR=/opt/impi-2017-devel
+    export PATH=${CP_INTELMPI_DIR}/bin64:$PATH
+    export INCLUDE=${CP_INTELMPI_DIR}/include64:$INCLUDE
+    export LIBRARY_PATH=${CP_INTELMPI_DIR}/lib64:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CP_INTELMPI_DIR}/lib64:$LD_LIBRARY_PATH
