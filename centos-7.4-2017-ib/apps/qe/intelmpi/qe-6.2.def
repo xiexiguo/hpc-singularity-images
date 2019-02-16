@@ -1,0 +1,12 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intelmpi-runtime.img
+
+%lables
+    quantum espresso 6.2 compiled by intelmpi
+
+%files
+    build/qe-6.2/ /opt/
+
+%environments
+    export CP_QE_DIR=/opt/qe-6.2
+    export PATH=${CP_QE_DIR}/bin:$PATH

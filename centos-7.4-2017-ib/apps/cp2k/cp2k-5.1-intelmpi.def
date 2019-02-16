@@ -1,0 +1,13 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intelmpi-runtime.img
+
+%lables
+    cp2k 5.1 compiled by intelmpi
+
+%files
+    build/cp2k-5.1 /opt/
+
+%environments
+    export CP_CP2K_DIR=/opt/cp2k-5.1/Linux-x86-64-intel-host
+    export PATH=${CP_CP2K_DIR}:$PATH
+

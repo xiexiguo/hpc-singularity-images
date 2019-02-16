@@ -1,0 +1,47 @@
+BootStrap: docker
+From: centos:7.4.1708
+
+%labels
+      inbox infiniband drivers
+      Version v1.0
+
+%post 
+yum makecache && yum install -y net-tools \
+      rdma \
+      libibverbs \
+      libibverbs-utils \
+      libibverbs-devel \
+      libibverbs-devel-static \
+      opensm \
+      infinipath-psm \
+      libcxgb3 \
+      libcxgb4 \
+      libipathverbs \
+      libmthca libmlx4 \
+      libmlx5 \
+      libnes \
+      libocrdma \
+      ibutils \
+      libibcm \
+      libibcommon \
+      libibmad \
+      libibumad \
+      librdmacm-utils \
+      librdmacm-devel \
+      librdmacm \
+      libibumad-devel \
+      perftest \
+      librdmacm \
+      librdmacm-utils \
+      ibacm \
+      libibverbs-utils \
+      infiniband-diags \
+      ibutils \
+      qperf \
+      && yum clean all
+
+%runscript
+      /bin/bash
+
+%test
+      ibstat

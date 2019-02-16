@@ -1,0 +1,33 @@
+Bootstrap: localimage
+From: /public/singularity/images/ib_mlnx.img
+
+%labels
+    intel compiler 2017 runtime, only including dynamic linked libraries.
+
+%files
+    intel-compiler-2017-runtime.tgz /opt
+
+%post
+    yum install -y bzip2 numactl-libs gcc-c++ gcc-gfortran \
+        compat-db47 compat-db-headers compat-glibc \
+        compat-glibc-header compat-libcap1 compat-libf2c which
+    yum clean all
+    cd /opt && tar xf intel-compiler-2017-runtime.tgz
+    rm -f intel-compiler-2017-runtime.tgz
+    mkdir -p /public/home
+    mkdir -p /public/software
+    mkdir -p /public/sourcecode
+
+%runscript
+    /bin/bash
+
+%test
+    ls -l /opt
+
+%environment
+    export CP_INTEL_DIR=/opt/intel-compiler-2017-runtime
+    export LD_LIBRARY_PATH=${CP_INTEL_DIR}/compiler/lib/intel64:${CP_INTEL_DIR}/mkl/lib/intel64:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=${CP_INTEL_DIR}/compiler/lib/intel64:${CP_INTEL_DIR}/mkl/lib/intel64:$LIBRARY_PATH
+    export INTEL_LICENSE_FILE=${CP_INTEL_DIR}/licenses
+    export MKLROOT=${CP_INTEL_DIR}/mkl
+    export NLSPATH=${CP_INTEL_DIR}/compiler/lib/intel64/locale/en_US:${CP_INTEL_DIR}/mkl/lib/intel64/locale/en_US:$NLSPATH

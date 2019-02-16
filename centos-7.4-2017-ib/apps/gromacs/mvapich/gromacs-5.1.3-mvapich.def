@@ -1,0 +1,16 @@
+Bootstrap: localimage
+From: /public/singularity_images/centos-7.4-2016/intelmpi-runtime.img
+
+%labels
+    gromacs 5.1.3 compiled by intelmpi
+ 
+%files
+    build/gromacs-5.1.3/  /opt
+
+%environments
+    export CP_GROMACS_DIR=/opt/gromacs-5.1.3
+    export PATH=${CP_GROMACS_DIR}/bin:$PATH
+    export LD_LIBRARY_PATH=${CP_GROMACS_DIR}/fftw-3.3.4/lib:${CP_GROMACS_DIR}/lib:$LD_LIBRARY_PATH
+
+%runscript
+    /bin/bash

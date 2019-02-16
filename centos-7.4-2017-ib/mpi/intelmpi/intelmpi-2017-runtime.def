@@ -1,0 +1,28 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intel-runtime.img
+
+%labels
+    intelmpi 2017 development, including compiler, libraries and head files.
+
+%files
+    impi-2017-runtime.tgz /opt
+
+%post
+    yum install -y dapl dapl-utils
+    yum clean all
+    cd /opt && tar xf impi-2017-runtime.tgz
+    rm -f impi-2017-runtime.tgz
+    mkdir -p /public/home
+    mkdir -p /public/sourcecode
+    mkdir -p /public/software
+
+%runscript
+    /bin/bash
+
+%test
+    echo $LD_LIBRARY_PATH
+
+%environment
+    export I_MPI_ROOT=/opt/impi-2017-runtime
+    export LIBRARY_PATH=${I_MPI_ROOT}/lib64:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${I_MPI_ROOT}/lib64:$LD_LIBRARY_PATH

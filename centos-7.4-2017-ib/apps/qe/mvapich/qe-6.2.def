@@ -1,0 +1,12 @@
+Bootstrap: localimage
+From: /public/singularity_images/centos-7.4-2016/mvapich-2.2-runtime.img
+
+%lables
+    quantum espresso 6.2 compiled by mvapich 2.2
+
+%files
+    build/qe-6.2/ /opt/
+
+%environments
+    export CP_QE_DIR=/opt/qe-6.2
+    export PATH=${CP_QE_DIR}/bin:$PATH

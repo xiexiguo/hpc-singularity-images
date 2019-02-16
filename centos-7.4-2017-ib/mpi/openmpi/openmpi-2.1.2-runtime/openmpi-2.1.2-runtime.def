@@ -1,0 +1,27 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intel-runtime.img
+
+%labels
+    openmpi 2.1.2 runtime, only including libraries.
+
+%files
+    openmpi/ /opt/
+
+%post
+    yum install -y epel-release
+    yum install -y munge munge-libs
+    yum install -y numactl-lib openssh-clients
+    yum clean all
+
+%runscript
+    /bin/bash
+
+%test
+    ls /opt/openmpi
+
+%environment
+    export CP_OPENMPI_DIR=/opt/openmpi
+    export PATH=${CP_OPENMPI_DIR}/bin:$PATH
+    export INCLUDE=${CP_OPENMPI_DIR}/include:$INCLUDE
+    export LIBRARY_PATH=${CP_OPENMPI_DIR}/lib:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CP_OPENMPI_DIR}/lib:$LD_LIBRARY_PATH

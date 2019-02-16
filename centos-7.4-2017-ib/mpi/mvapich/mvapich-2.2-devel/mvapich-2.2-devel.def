@@ -1,0 +1,30 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intel-devel.img
+
+%labels
+    mvapich 2.2 development, including compiler, libraries and head files.
+
+%files
+    mvapich2-2.2.tar.gz /opt
+
+%post
+    yum install -y byacc hwloc hwloc-devel hwloc-libs
+    yum clean all
+    cd /opt && tar xf mvapich2-2.2.tar.gz
+    cd mvapich2-2.2
+    ./configure --prefix=/opt/mvapich2 --enable-g=dbg --with-device=ch3:nemesis:ib,tcp --with-psm=no CC=icc CXX=icpc F77=ifort FC=ifort && \
+    make -j $(grep processor /proc/cpuinfo | wc -l) && make install
+    cd .. && rm mvapich2-2.2 -rf
+
+%runscript
+    /bin/bash
+
+%test
+    mpicc -show
+
+%environment
+    export CP_MVAPICH_DIR=/opt/mvapich2
+    export PATH=${CP_MVAPICH_DIR}/bin:$PATH
+    export INCLUDE=${CP_MVAPICH_DIR}/include:$INCLUDE
+    export LIBRARY_PATH=${CP_MVAPICH_DIR}/lib:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CP_MVAPICH_DIR}/lib:$LD_LIBRARY_PATH
