@@ -1,0 +1,30 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intel-devel.img
+
+%labels
+    openmpi 2.1.2 development, including compiler, libraries and head files.
+
+%files
+    openmpi-2.1.2.tar.bz2 /mnt
+
+%post
+    yum install -y epel-release
+    yum install -y munge munge-libs munge-devel
+    yum install -y numactl numactl-libs numactl-devel openssh-clients
+    yum clean all
+    cd /mnt && tar xf openmpi-2.1.2.tar.bz2
+    cd openmpi-2.1.2
+    ./configure --prefix=/opt/openmpi --enable-mpirun-prefix-by-default CC=icc CXX=icpc F77=ifort FC=ifort
+    make -j $(grep processor /proc/cpuinfo | wc -l) && make install
+    cd .. && rm openmpi-2.1.2* -rf
+
+%runscript
+    /bin/bash
+
+
+%environment
+    export CP_OPENMPI_DIR=/opt/openmpi
+    export PATH=${CP_OPENMPI_DIR}/bin:$PATH
+    export INCLUDE=${CP_OPENMPI_DIR}/include:$INCLUDE
+    export LIBRARY_PATH=${CP_OPENMPI_DIR}/lib:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CP_OPENMPI_DIR}/lib:$LD_LIBRARY_PATH

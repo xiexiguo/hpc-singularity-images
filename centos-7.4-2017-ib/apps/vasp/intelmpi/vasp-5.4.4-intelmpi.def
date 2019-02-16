@@ -1,0 +1,13 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intelmpi-runtime.img
+
+%labels
+    vasp compiled by intelmpi
+ 
+%files
+    vasp_std    /usr/local/bin
+    vasp_ncl    /usr/local/bin
+    vasp_gam    /usr/local/bin
+
+%runscript
+    /bin/bash

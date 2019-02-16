@@ -1,0 +1,23 @@
+BootStrap: docker
+From: centos:7.4.1708
+
+%labels
+      mellanox infiniband drivers
+      Version v1.0
+
+%files
+     MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz /root
+
+%post 
+
+cd /root && tar xf MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz
+cd MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64
+./mlnxofedinstall --user-space-only --without-fw-update --all -q
+cd ..
+rm -rf MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64 MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz
+
+%runscript
+      /bin/bash
+
+%test
+      ibstat

@@ -1,0 +1,39 @@
+Bootstrap: localimage
+From: /public/singularity/images/ib_mlnx.img
+
+%labels
+    intel compiler 2017 development, including compiler, libraries and head files.
+
+%files
+    intel-compiler-2017-devel.tgz /opt
+
+%post
+    yum install -y gcc gcc-c++ gcc-gfortran make autoconf automake cmake libtool bzip2 \
+        numactl numactl-libs numactl-devel \
+        compat-db47 compat-db-headers compat-glibc \
+        compat-glibc-header compat-libcap1 compat-libf2c which
+    yum clean all
+    cd /opt && tar xf intel-compiler-2017-devel.tgz
+    cp /opt/intel-compiler-2017-devel/licenses/*.lic /opt/intel-compiler-2017-devel/bin/intel64
+    rm -f intel-compiler-2017-devel.tgz
+    mkdir -p /public/home
+    mkdir -p /public/software
+    mkdir -p /public/sourcecode
+
+%runscript
+    /bin/bash
+
+%test
+    icc -v
+
+%environment
+    export CP_INTEL_DIR=/opt/intel-compiler-2017-devel
+    export PATH=${CP_INTEL_DIR}/bin/intel64:$PATH
+    export INCLUDE=${CP_INTEL_DIR}/compiler/include:${CP_INTEL_DIR}/mkl/include
+    export LD_LIBRARY_PATH=${CP_INTEL_DIR}/compiler/lib/intel64:${CP_INTEL_DIR}/mkl/lib/intel64:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=${CP_INTEL_DIR}/compiler/lib/intel64:${CP_INTEL_DIR}/mkl/lib/intel64:$LIBRARY_PATH
+    export FPATH=${CP_INTEL_DIR}/mkl/include:$FPATH
+    export CPATH=${CP_INTEL_DIR}/mkl/include:$CPATH
+    export INTEL_LICENSE_FILE=${CP_INTEL_DIR}/licenses
+    export MKLROOT=${CP_INTEL_DIR}/mkl
+    export NLSPATH=${CP_INTEL_DIR}/compiler/lib/intel64/locale/en_US:${CP_INTEL_DIR}/mkl/lib/intel64/locale/en_US:$NLSPATH

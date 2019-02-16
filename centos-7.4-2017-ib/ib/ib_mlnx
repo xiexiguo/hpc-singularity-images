@@ -1,0 +1,35 @@
+BootStrap: docker
+From: centos:7.4.1708
+
+%labels
+      mellanox infiniband drivers
+      Version v1.0
+
+%files
+     MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz /tmp
+
+%post 
+
+cd /tmp && tar xf MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz
+cat <<EOF > /etc/yum.repos.d/mlnx.repo
+[mlnx]
+name=mlnx
+baseurl=file:///tmp/MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64/RPMS
+enablbed=1
+gpgcheck=0      
+EOF
+yum install -y libibverbs
+yum install -y net-tools \
+      rdma  libibverbs-utils libibverbs-devel  libibverbs-devel-static  opensm \
+      infinipath-psm  libcxgb3  libcxgb4  libipathverbs  libmthca libmlx4  libmlx5 \
+      libnes libocrdma ibutils libibcm libibcommon libibmad libibumad librdmacm-utils \
+      librdmacm-devel librdmacm libibumad-devel perftest librdmacm librdmacm-utils \
+      ibacm libibverbs-utils infiniband-diags ibutils qperf dapl dapl-utils dapl-devel dapl-devel-static
+yum clean all
+#rm -f /etc/yum.repos.d/mlnx.repo
+
+%runscript
+      /bin/bash
+
+%test
+      ibstat

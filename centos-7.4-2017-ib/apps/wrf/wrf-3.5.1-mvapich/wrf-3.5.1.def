@@ -1,0 +1,16 @@
+Bootstrap: localimage
+From: /public/singularity_images/centos-7.4-2016/mvapich-2.2-runtime.img
+
+%labels
+    wrf 3.5.1 compiled by mvapich 2.2
+
+%files
+    wrf/ /opt
+
+%environment
+    export CP_WRF_DIR=/opt/wrf
+    export PATH=${CP_WRF_DIR}/main:$PATH
+    export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+
+%runscript
+    /bin/bash

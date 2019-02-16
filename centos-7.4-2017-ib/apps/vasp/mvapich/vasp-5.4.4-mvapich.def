@@ -1,0 +1,13 @@
+Bootstrap: localimage
+From: /public/singularity_images/centos-7.4-2016/mvapich-2.2-runtime.img
+
+%labels
+    vasp compiled by mvapich 2.2
+ 
+%files
+    vasp_std    /usr/local/bin
+    vasp_ncl    /usr/local/bin
+    vasp_gam    /usr/local/bin
+
+%runscript
+    /bin/bash

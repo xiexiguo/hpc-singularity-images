@@ -1,0 +1,23 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/intel-runtime.img
+
+%labels
+    mvapich 2.2 runtime, only including libraries.
+
+%files
+    mvapich2/ /opt/
+
+%post
+    yum install -y hwloc hwloc-libs
+    yum clean all
+
+%runscript
+    /bin/bash
+
+%test
+    echo $LD_LIBRARY_PATH
+
+%environment
+    export CP_MVAPICH_DIR=/opt/mvapich2
+    export LIBRARY_PATH=${CP_MVAPICH_DIR}/lib:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=${CP_MVAPICH_DIR}/lib:$LD_LIBRARY_PATH

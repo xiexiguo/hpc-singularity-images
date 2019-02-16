@@ -1,0 +1,21 @@
+Bootstrap: localimage
+From: /public/singularity/images/centos-7.4-2017/openmpi-2.1.2-devel.img
+
+%labels
+    HPL compiled by openmpi
+ 
+%files
+    Make.intel /mnt
+    hpl-2.2.tar.gz /mnt
+    
+%post
+    source /environment
+    cd /mnt
+    tar xf hpl-2.2.tar.gz
+    cd hpl-2.2
+    cp ../Make.intel .
+    make arch=intel
+    cp bin/intel/xhpl /usr/bin
+
+%runscript
+    /bin/bash
